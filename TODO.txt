@@ -1,0 +1,41 @@
+12.06
++ Добавить utility/Random.h - генератор рандомных чисел
+	примеры/инфа по классу:
+	https://github.com/Hopson97/SFML-Game-Framework/blob/master/Source/Util/Random.h
+	http://www.quizful.net/post/random-number-generation-in-cpp11
+	http://blog.harrix.org/article/7370
+
++ Добавить MainGame класс
++ Добавить класс Таймер для ФПС и делтаТайм
++ Добавить класс Display/Graphic - для SDL getWindow/getRenderer
++ Добавить States
+
+******
+15.06
+- Подумать как храниь данные в мяче. Может сделать структурку под вектор? или обойтись ток СДЛштуками?
+- rvalue lvalue info read
+	http://alenacpp.blogspot.com/2008/02/rvo-nrvo.html
+	https://habr.com/ru/post/242639/
+	http://bajamircea.github.io/coding/cpp/2016/04/07/move-forward.html
+	https://ru.stackoverflow.com/questions/908361/%D0%A7%D0%B5%D0%BC-%D0%BE%D1%82%D0%BB%D0%B8%D1%87%D0%B0%D1%8E%D1%82%D1%81%D1%8F-%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B8-move-%D0%B8-forward
+********
+20.06
++ DONE! Пофиксить FPS. Проблемы: при низком мяч проскакивает блоки. 
+	https://gafferongames.com/post/fix_your_timestep/
+	https://fabiensanglard.net/timer_and_framerate/
+
++ DONE! Добавить структуру Rect для бокса и чека колизии.
+
+******
+22.06
+
+- начать делать ECS:
+	-КонтролерКомпонент
+- проверить коректность операторов перегрухки в векторе
+	https://stackoverflow.com/questions/4421706/what-are-the-basic-rules-and-idioms-for-operator-overloading
+
+
+26.06
+- проблемы с абстрактным класом и виртуальными методами... вохможно не стоит их делать без реализации. А поставить {}
+- проблемы с физикой и колизиями. Чет напутал в обмене данных с компонентами
+- проблема с вектором... блэт. Переделать на SDL_FPoint
