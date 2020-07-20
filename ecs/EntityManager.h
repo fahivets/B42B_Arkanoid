@@ -1,6 +1,9 @@
 #ifndef ENTITYMANAGER_H
 #define ENTITYMANAGER_H
 #include "ECSHelper.h"
+#include "managers/ResourceHolder.h"
+#include "managers/InputManager.h"
+
 class Entity;
 
 class EntityManager
@@ -11,7 +14,8 @@ public:
     ~EntityManager() = default;
 
     // Functions
-    void handleInput(const Uint8* keys);
+ //   void handleInput(const Uint8* keys);
+    void handleInput(const InputManager& input);
     void update(const float& deltaTime);
     void render(SDL_Renderer& rRender);
 

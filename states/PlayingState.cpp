@@ -1,13 +1,9 @@
 #include "stdafx.h"
 #include "PlayingState.h"
-
-
+#include "../MainGame.h"
 
 PlayingState::PlayingState(MainGame& rGame) : State(rGame)
 {
-//	m_ball = new Ball(DISPLAY::WINDOW::WIDTH / 2, DISPLAY::WINDOW::HEIGTH / 2);
-//	m_paddle = new Paddle(DISPLAY::WINDOW::WIDTH / 2, DISPLAY::WINDOW::HEIGTH - 50);
-
 	createBall();
 	createPaddle();
 
@@ -19,29 +15,43 @@ PlayingState::PlayingState(MainGame& rGame) : State(rGame)
 			createBrick(Vector2f{ (iX + 1) * (BRICK::WIDTH + 3) + 22, (iY + 2) * (BRICK::HEIGTH + 3) });
 		}
 	}
+
+	ResourceHolder::get().audio.playMusic("test");
 }
 
 PlayingState::~PlayingState()
-{
-//	delete m_ball;
-//	delete m_paddle;
-//	m_ball = nullptr;
-//	m_paddle = nullptr;
-}
+{}
 
 void PlayingState::endState()
 {
 
 }
 
-void PlayingState::handleInput(const Uint8* keys)
+void PlayingState::handleInput(const InputManager& input)
 {
-	if (keys[SDL_SCANCODE_ESCAPE])
+	if (input.keyDown(SDL_SCANCODE_ESCAPE))
 	{
 		needPop(true);
 	}
+	// test sounds
+	if (input.keyDown(SDL_SCANCODE_SPACE))
+	{
+		ResourceHolder::get().audio.pauseMusic();
+	}
+	if (input.keyDown(SDL_SCANCODE_R))
+	{
+		ResourceHolder::get().audio.resumeMusic();
+	}
+	if (input.mouseButtonDown(LEFT))
+	{
+		std::cout << "MOUSE PRESSED LEFT" << input.mousePos() << "\n";
+	}
+	if (input.mouseButtonDown(RIGHT))
+	{
+		std::cout << "MOUSE PRESSED RIGHT" << input.mousePos() << "\n";
+	}
 
-	m_entityManager.handleInput(keys);
+	m_entityManager.handleInput(input);
 }
 
 void PlayingState::update(const float& deltaTime)
@@ -64,120 +74,87 @@ void PlayingState::update(const float& deltaTime)
 			testBBCollision(*ball, *brick);
 		}
 	}
-
-	/* old ver
-	m_ball->update(deltaTime);
-	m_paddle->update(deltaTime);
-
-	testCollision(*m_ball, *m_paddle);
-
-	for (auto& brick : m_bricks)
-	{
-		testCollision(*m_ball, brick);
-	}
-
-	// STL algoorithms + lambda
-	m_bricks.erase(std::remove_if(begin(m_bricks), end(m_bricks),
-			[](const Brick& brick)
-			{
-				return (brick.isDestroyed());
-			}),
-			end(m_bricks));
-	*/
 }
 
 void PlayingState::render(SDL_Renderer& rRender)
 {
 	m_entityManager.render(rRender);
-	/* old
-	m_ball->render(rRender);
-	m_paddle->render(rRender);
-	for (auto& brick : m_bricks)
-		brick.render(rRender);
-	*/
 }
 
 // Entity factory
-Entity& PlayingState::createBall()
+void PlayingState::createBall()
 {
 	auto& entity(m_entityManager.addEntity());
 
 	entity.addComponent<PositionComponent>(Vector2f{ DISPLAY::WINDOW::WIDTH / 2, DISPLAY::WINDOW::HEIGTH / 2 });
-	entity.addComponent<PhysicsComponent>(Vector2f{ BALL::RADIUS * 2, BALL::RADIUS * 2 });
-	entity.addComponent<RectangleComponent>(Vector2f{ BALL::RADIUS * 2, BALL::RADIUS * 2 }, SDL_Color{ 255, 0, 0, 255 });
-
+	entity.addComponent<BoxComponent>(Vector2f{ BALL::RADIUS * 2, BALL::RADIUS * 2 });
+	entity.addComponent<PhysicsComponent>();
+	entity.addComponent<RectangleComponent>(SDL_Color{ 255, 0, 0, 255 });
 	auto& physics(entity.getComponent<PhysicsComponent>());
 	physics.m_velocity = Vector2f{ -BALL::VELOCITY, -BALL::VELOCITY };
 
-	// TEST
 	physics.outOfBounds = [&physics](const Vector2f& mSide)
 	{
 		if (mSide.x != 0.f)
-			physics.m_velocity.x =
-			std::abs(physics.m_velocity.x) * mSide.x;
-
+		{
+			physics.m_velocity.x = std::abs(physics.m_velocity.x) * mSide.x;
+		}
 		if (mSide.y != 0.f)
-			physics.m_velocity.y =
-			std::abs(physics.m_velocity.y) * mSide.y;
+		{
+			physics.m_velocity.y = std::abs(physics.m_velocity.y) * mSide.y;
+		}
 	};
 
-
 	entity.addGroup(ArkanoidGroup::GBall);
-	return (entity);
 }
 
-Entity& PlayingState::createPaddle()
+void PlayingState::createPaddle()
 {
 	auto& entity(m_entityManager.addEntity());
 
 	entity.addComponent<PositionComponent>(Vector2f{ DISPLAY::WINDOW::WIDTH / 2, DISPLAY::WINDOW::HEIGTH - 50 });
-	entity.addComponent<PhysicsComponent>(Vector2f{ PADDLE::WIDTH, PADDLE::HEIGTH });
-	entity.addComponent<RectangleComponent>(Vector2f{ PADDLE::WIDTH, PADDLE::HEIGTH }, SDL_Color{ 0, 0, 255, 255 });
+	entity.addComponent<BoxComponent>(Vector2f{ PADDLE::WIDTH, PADDLE::HEIGTH });
+	entity.addComponent<PhysicsComponent>();
+
+	// TODO tmp rectcomponent
+	entity.addComponent<RectangleComponent>(SDL_Color{ 0, 0, 255, 255 });
+	
+	entity.addComponent<TextureComponent>(m_pGame->getRenderer(), "test");
 	entity.addComponent<PaddleControlComponent>();
 	
-//	auto& physics(entity.getComponent<PhysicsComponent>());
-//	physics.m_velocity = Vector2f{ PADDLE::VELOCITY, PADDLE::VELOCITY };
-
 	entity.addGroup(ArkanoidGroup::GPaddle);
-
-	return (entity);
 }
 
-Entity& PlayingState::createBrick(const Vector2f& rPosition)
+void PlayingState::createBrick(const Vector2f& rPosition)
 {
 	auto& entity(m_entityManager.addEntity());
 
 	entity.addComponent<PositionComponent>(rPosition);
-	entity.addComponent<PhysicsComponent>(Vector2f{ BRICK::WIDTH, BRICK::HEIGTH });
-	entity.addComponent<RectangleComponent>(Vector2f{ BRICK::WIDTH, BRICK::HEIGTH }, SDL_Color{ 255, 255, 0, 255 });
+	entity.addComponent<BoxComponent>(Vector2f{ BRICK::WIDTH, BRICK::HEIGTH });
+	entity.addComponent<PhysicsComponent>();
 
+	// TODO tmp rectcomponent
+	entity.addComponent<RectangleComponent>(SDL_Color{ 255, 255, 0, 255 });
+	// test fiasko texture
+	entity.addComponent<TextureComponent>(m_pGame->getRenderer(), "none");
+	
 	entity.addGroup(ArkanoidGroup::GBrick);
-
-	return (entity);
 }
 
-//NEW collision
+// Collision
 void PlayingState::testBPCollision(Entity& rBall, Entity& rPaddle) noexcept
 {
 	auto& ball(rBall.getComponent<PhysicsComponent>());
 	auto& paddle(rPaddle.getComponent<PhysicsComponent>());
 
-	if (!isIntersecting(ball, paddle))
+	if (!isIntersecting(ball.box(), paddle.box()))
 		return ;
 
 	ball.m_velocity.y = -BALL::VELOCITY;
-	if (ball.x() < paddle.x())
+	if (ball.box().xCenter() < paddle.box().xCenter())
 		ball.m_velocity.x = -BALL::VELOCITY;
 	else
 		ball.m_velocity.x = BALL::VELOCITY;
-
-	/*
-	ball.setDirY(-1.0f);
-	if (ball.x() < paddle.x())
-		ball.setDirX(-1.0f);
-	else
-		ball.setDirX(1.0f);
-	*/
 }
 
 void PlayingState::testBBCollision(Entity& rBall, Entity& rBrick) noexcept
@@ -185,16 +162,16 @@ void PlayingState::testBBCollision(Entity& rBall, Entity& rBrick) noexcept
 	auto& ball(rBall.getComponent<PhysicsComponent>());
 	auto& brick(rBrick.getComponent<PhysicsComponent>());
 
-	if (!isIntersecting(ball, brick))
+	if (!isIntersecting(ball.box(), brick.box()))
 		return;
 
 	rBrick.destroy();
 
 	// How much the ball intersects the brick in every directions
-	float overlapLeft{ ball.right() - brick.left() };
-	float overlapRight{ ball.left() - brick.right() };
-	float overlapTop{ ball.bottom() - brick.top() };
-	float overlapBottom{ ball.top() - brick.bottom() };
+	float overlapLeft{ ball.box().right() - brick.box().left() };
+	float overlapRight{ ball.box().left() - brick.box().right() };
+	float overlapTop{ ball.box().bottom() - brick.box().top() };
+	float overlapBottom{ ball.box().top() - brick.box().bottom() };
 
 	bool ballFromLeft{ abs(overlapLeft) < abs(overlapRight) };
 	bool ballFromTop{ abs(overlapTop) < abs(overlapBottom) };
@@ -206,61 +183,4 @@ void PlayingState::testBBCollision(Entity& rBall, Entity& rBrick) noexcept
 		ball.m_velocity.x = ballFromLeft ? -BALL::VELOCITY : BALL::VELOCITY;
 	else
 		ball.m_velocity.y = ballFromTop ? -BALL::VELOCITY : BALL::VELOCITY;
-	/*
-	if (abs(minOverlapX) < abs(minOverlapY))
-	{
-		float newDirX = ballFromLeft ? (-1.0f) : (1.0f);
-		ball.setDirX(newDirX);
-	}
-	else
-	{
-		float newDirY = ballFromTop ? (-1.0f) : (1.0f);
-		ball.setDirY(newDirY);
-	}
-	*/
-}
-// old collision
-void PlayingState::testCollision(Ball& ball, Paddle& paddle) noexcept
-{
-	if (!isIntersecting(ball, paddle))
-		return ;
-
-	ball.setDirY(-1.0f);
-
-	if (ball.centerX() < paddle.centerX())
-		ball.setDirX(-1.0f);
-	else
-		ball.setDirX(1.0f);
-}
-
-void PlayingState::testCollision(Ball& ball, Brick& brick) noexcept
-{
-	if (!isIntersecting(ball, brick))
-		return ;
-
-	brick.destroy();
-
-	// How much the ball intersects the brick in every directions
-	float overlapLeft{ ball.right() - brick.left() };
-	float overlapRight{ ball.left() - brick.right() };
-	float overlapTop{ ball.bottom() - brick.top() };
-	float overlapBottom{ ball.top() - brick.bottom() };
-
-
-	bool ballFromLeft{ abs(overlapLeft) < abs(overlapRight) };
-	bool ballFromTop{ abs(overlapTop) < abs(overlapBottom) };
-
-	float minOverlapX{ ballFromLeft ? (overlapLeft) : (overlapRight) };
-	float minOverlapY{ ballFromTop ? (overlapTop) : (overlapBottom) };
-
-	if (abs(minOverlapX) < abs(minOverlapY))
-	{
-		float newDirX = ballFromLeft ? (-1.0f) : (1.0f);
-		ball.setDirX(newDirX);
-	}
-	else
-	{
-		float newDirY = ballFromTop ? (-1.0f) : (1.0f);
-		ball.setDirY(newDirY);
-	}
 }

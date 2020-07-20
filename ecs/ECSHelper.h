@@ -10,6 +10,7 @@
 struct Component;
 class Entity;
 class EntityManager;
+class InputManager;
 
 // Typedef for the component ID type
 using ComponentID = std::size_t;

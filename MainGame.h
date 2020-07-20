@@ -4,6 +4,8 @@
 #include "utility/NonMovable.h"
 #include "utility/Timer.h"
 #include "managers/DisplayManager.h"
+#include "managers/ResourceHolder.h"
+#include "managers/InputManager.h"
 #include "states/StartState.h"
 
 constexpr float constFTimeStep{ 1.0f };
@@ -44,6 +46,7 @@ private:
 
 	// make Display class adn InputHandler class
 	DisplayManager m_display;
+	InputManager m_input;
 	SDL_Event m_event;
 
 

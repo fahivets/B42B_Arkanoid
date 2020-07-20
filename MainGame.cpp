@@ -3,10 +3,18 @@
 
 MainGame::MainGame()
 {
-
 	if (m_display.getStatus())
 	{
 		m_isRunning = true;
+
+		// init starting textures (maybe move this in to current the state)
+		ResourceHolder::get().textures.init(m_display.getRenderer());
+		// init starting fonts (maybe move this in to current the state)
+		ResourceHolder::get().fonts.init();
+		// init starting audio (maybe move this in to current the state)
+		ResourceHolder::get().audio.init();
+
+
 		pushState<StartState>(*this);
 	}
 }
@@ -28,13 +36,17 @@ bool MainGame::isRunning() const
 
 void MainGame::update(const float deltaTime)
 {
+
 	m_states.top()->update(deltaTime);
 }
 
 void MainGame::handleInput()
 {
-	SDL_PumpEvents();
-	const Uint8* keys = SDL_GetKeyboardState(nullptr);
+//	SDL_PumpEvents();
+//	const Uint8* keys = SDL_GetKeyboardState(nullptr);
+
+	// TEST new input
+	m_input.update();
 
 	while (SDL_PollEvent(&m_event))
 	{
@@ -44,7 +56,8 @@ void MainGame::handleInput()
 		}
 	}
 
-	m_states.top()->handleInput(keys);
+	//m_states.top()->handleInput(keys);
+	m_states.top()->handleInput(m_input);
 }
 
 void MainGame::render()
@@ -81,6 +94,9 @@ void MainGame::run()
 
 		// Update states status and pop it
 		updateState();
+
+		// Update prev input
+		m_input.updatePrevInput();
 
 		// Update delta time every frame
 		deltaTime = m_timer.getDelta();

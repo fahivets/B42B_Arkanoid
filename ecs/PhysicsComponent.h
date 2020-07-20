@@ -2,38 +2,28 @@
 #define PHYSICSCOMPONENT_H
 #include "Component.h"
 #include "PositionComponent.h"
+#include "BoxComponent.h"
 
 struct PhysicsComponent : public Component
 {
 	// Constructor/Destructor
-	PhysicsComponent(const Vector2f& rSize);
+	PhysicsComponent() = default;
 	~PhysicsComponent() = default;
 
 	// Functions
 	void init() override;
 	void update(const float& deltaTime) override;
 
-	void setDirX(const float dirX);
-	void setDirY(const float dirY);
-	float x() const noexcept;
-	float y() const noexcept;
-	float left() const noexcept;
-	float right() const noexcept;
-	float top() const noexcept;
-	float bottom() const noexcept;
+	BoxComponent& box() const;
 
-	//Test
 	// Use a callback to handle the "out of bounds" event.
-	std::function<void(const Vector2f&)> outOfBounds;
-	// test
-	void render(SDL_Renderer& rRender) {};
-	void handleInput(const Uint8* keys) {};
-
+	std::function<void(const Vector2f&)> outOfBounds{ nullptr };
+	
 	// Members
 	PositionComponent* m_pPosComp{ nullptr };
+	BoxComponent* m_pBoxComp{ nullptr };
 	Vector2f m_velocity;
-	Vector2f m_dir;
-	Vector2f m_size;
+
 };
 
 #endif

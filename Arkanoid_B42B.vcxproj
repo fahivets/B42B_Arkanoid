@@ -107,7 +107,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -127,7 +127,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -143,7 +143,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -163,22 +163,29 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Ball.cpp" />
-    <ClCompile Include="Brick.cpp" />
+    <ClCompile Include="ecs\BoxComponent.cpp" />
     <ClCompile Include="ecs\Entity.cpp" />
     <ClCompile Include="ecs\EntityManager.cpp" />
+    <ClCompile Include="ecs\LableComponent.cpp" />
     <ClCompile Include="ecs\PaddleControlComponent.cpp" />
     <ClCompile Include="ecs\PhysicsComponent.cpp" />
     <ClCompile Include="ecs\PositionComponent.cpp" />
     <ClCompile Include="ecs\RectangleComponent.cpp" />
+    <ClCompile Include="ecs\TextureComponent.cpp" />
+    <ClCompile Include="ecs\UIButtonComponent.cpp" />
+    <ClCompile Include="gui\Widget.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainGame.cpp" />
+    <ClCompile Include="managers\AudioManager.cpp" />
     <ClCompile Include="managers\DisplayManager.cpp" />
-    <ClCompile Include="Paddle.cpp" />
+    <ClCompile Include="managers\FontManager.cpp" />
+    <ClCompile Include="managers\InputManager.cpp" />
+    <ClCompile Include="managers\TextureManager.cpp" />
+    <ClCompile Include="managers\ResourceHolder.cpp" />
     <ClCompile Include="states\PlayingState.cpp" />
     <ClCompile Include="states\StartState.cpp" />
     <ClCompile Include="states\State.cpp" />
@@ -209,20 +216,28 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Ball.h" />
-    <ClInclude Include="Brick.h" />
+    <ClInclude Include="ecs\BoxComponent.h" />
     <ClInclude Include="ecs\Component.h" />
+    <ClInclude Include="ecs\ComponentIncludeHelper.h" />
     <ClInclude Include="ecs\ECSHelper.h" />
     <ClInclude Include="ecs\Entity.h" />
     <ClInclude Include="ecs\EntityManager.h" />
+    <ClInclude Include="ecs\LableComponent.h" />
     <ClInclude Include="ecs\PaddleControlComponent.h" />
     <ClInclude Include="ecs\PhysicsComponent.h" />
     <ClInclude Include="ecs\PositionComponent.h" />
     <ClInclude Include="ecs\RectangleComponent.h" />
+    <ClInclude Include="ecs\TextureComponent.h" />
+    <ClInclude Include="ecs\UIButtonComponent.h" />
+    <ClInclude Include="gui\Widget.h" />
     <ClInclude Include="MainGame.h" />
+    <ClInclude Include="managers\AudioManager.h" />
     <ClInclude Include="managers\DisplayManager.h" />
     <ClInclude Include="GameConstants.h" />
-    <ClInclude Include="Paddle.h" />
+    <ClInclude Include="managers\FontManager.h" />
+    <ClInclude Include="managers\InputManager.h" />
+    <ClInclude Include="managers\TextureManager.h" />
+    <ClInclude Include="managers\ResourceHolder.h" />
     <ClInclude Include="states\PlayingState.h" />
     <ClInclude Include="states\StartState.h" />
     <ClInclude Include="states\State.h" />

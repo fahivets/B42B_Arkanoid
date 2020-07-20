@@ -13,10 +13,11 @@ struct Component
     virtual ~Component() = default;
 
     // Virtual functions
-    virtual void init() = 0;
-    virtual void update(const float& deltaTime) = 0;
-    virtual void render(SDL_Renderer& rRender) = 0;
-    virtual void handleInput(const Uint8* keys) = 0;
+    virtual void init() {};
+    virtual void update(const float& deltaTime) {};
+    virtual void render(SDL_Renderer& rRender) {};
+  //  virtual void handleInput(const Uint8* keys) {};
+    virtual void handleInput(const InputManager& input) {};
 };
 
 #endif

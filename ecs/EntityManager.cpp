@@ -1,12 +1,20 @@
 #include "stdafx.h"
 #include "EntityManager.h"
 #include "Entity.h"
-
+/*
 void EntityManager::handleInput(const Uint8* keys)
 {
     for (auto& entity : m_entities)
     {
         entity->handleInput(keys);
+    }
+}
+*/
+void EntityManager::handleInput(const InputManager& input)
+{
+    for (auto& entity : m_entities)
+    {
+        entity->handleInput(input);
     }
 }
 

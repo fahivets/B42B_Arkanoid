@@ -12,13 +12,8 @@ struct PaddleControlComponent : public Component
 
 	// Functions
 	void init() override;
-	void handleInput(const Uint8* keys) override;
-
-	// test
-	void update(const float& deltaTime) {};
-	void render(SDL_Renderer& rRender) {};
-
-
+	//void handleInput(const Uint8* keys) override;
+	void handleInput(const InputManager& input) override;
 
 	// Members
 	PhysicsComponent* m_pPhysComponent{ nullptr };

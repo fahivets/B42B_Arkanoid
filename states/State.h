@@ -3,6 +3,7 @@
 #include "utility/NonCopyable.h"
 
 class MainGame;
+class InputManager;
 
 class State : public NonCopyable
 {
@@ -18,7 +19,8 @@ public:
 
 	// Virtual functions
 	virtual void endState() = 0;
-	virtual void handleInput(const Uint8* keys) = 0;
+	//virtual void handleInput(const Uint8* keys) = 0;
+	virtual void handleInput(const InputManager& input) = 0;
 	virtual void update(const float& deltaTime) = 0;
 	virtual void render(SDL_Renderer& render) = 0;
 	

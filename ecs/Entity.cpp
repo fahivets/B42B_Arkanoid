@@ -6,11 +6,20 @@ Entity::Entity(EntityManager& rManager) : m_rManager(rManager)
 {}
 
 // Functions
+/*
 void Entity::handleInput(const Uint8* keys)
 {
     for (auto& component : m_components)
     {
         component->handleInput(keys);
+    }
+}
+*/
+void Entity::handleInput(const InputManager& input)
+{
+    for (auto& component : m_components)
+    {
+        component->handleInput(input);
     }
 }
 

@@ -1,15 +1,8 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 #include "ECSHelper.h"
-#include "Component.h"
-#include "PositionComponent.h"
-#include "PhysicsComponent.h"
-#include "RectangleComponent.h"
-#include "PaddleControlComponent.h"
+#include "ComponentIncludeHelper.h"
 #include "EntityManager.h"
-
-//struct Component;
-class EntityManager;
 
 class Entity
 {
@@ -19,7 +12,8 @@ public:
     ~Entity() = default;
 
     // Functions
-    void handleInput(const Uint8* keys);
+  //  void handleInput(const Uint8* keys);
+    void handleInput(const InputManager& input);
     void update(const float& deltaTime);
     void render(SDL_Renderer& rRender);
 
@@ -86,26 +80,26 @@ T& Entity::addComponent(TArgs&&... rrArgs)
 
     // Allocating the component of type <T>
     // on the heap, by forwarding the passed arguments to its constructor.
-    T* component(new T(std::forward<TArgs>(rrArgs)...));
+    T* newComponent(new T(std::forward<TArgs>(rrArgs)...));
    
     // Set the component's entity to the current instance.
-    component->m_entity = this;
+    newComponent->m_entity = this;
     
     // Wrap the raw pointer into a smart one
-    std::unique_ptr<Component> uPtr{ component };
+    std::unique_ptr<Component> uPtr{ newComponent };
 
     // Add the smart pointer to our container
     // <std::unique_ptr> cannot be copied, so we use <std::move>
     m_components.emplace_back(std::move(uPtr));
 
     // Adding new component to the bitset and to the array.
-    m_componentArray[getComponentTypeID<T>()] = component;
+    m_componentArray[getComponentTypeID<T>()] = newComponent;
     m_componentBitset[getComponentTypeID<T>()] = true;
 
     // Called Component::init()
-    component->init();
+    newComponent->init();
 
-    return (*component);
+    return (*newComponent);
 }
 
 template <typename T>

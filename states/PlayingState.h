@@ -1,17 +1,10 @@
 #ifndef PLAYINGSTATE_H
 #define PLAYINGSTATE_H
 #include "State.h"
-#include "Ball.h"
-#include "Paddle.h"
-#include "Brick.h"
 
 // ECS includes
 #include "ecs/Entity.h"
 #include "ecs/EntityManager.h"
-#include "ecs/PositionComponent.h"
-#include "ecs/PhysicsComponent.h"
-#include "ecs/RectangleComponent.h"
-#include "ecs/PaddleControlComponent.h"
 
 class PlayingState : public State
 {
@@ -21,9 +14,9 @@ public:
 	{
 		GPaddle,
 		GBrick,
-		GBall
+		GBall,
+		GButton
 	};
-
 
 	// Constructors/Destructors
 	PlayingState(MainGame& rGame);
@@ -31,30 +24,28 @@ public:
 
 	// Functions
 	void endState() override;
-	void handleInput(const Uint8* keys) override;
+	//void handleInput(const Uint8* keys) override;
+	void handleInput(const InputManager& input) override;
 	void update(const float& deltaTime) override;
 	void render(SDL_Renderer& rRender) override;
 
 private:
-	EntityManager m_entityManager;
-
-//	Ball* m_ball;
-//	Paddle* m_paddle;
-//	std::vector<Brick> m_bricks;
-	
 	// Entity factory
-	Entity& createBall();
-	Entity& createPaddle();
-	Entity& createBrick(const Vector2f& rPosition);
+	void createBall();
+	void createPaddle();
+	void createBrick(const Vector2f& rPosition);
 
+	// Collision
 	void testBPCollision(Entity& rBall, Entity& rPaddle) noexcept;
 	void testBBCollision(Entity& rBall , Entity& rBrick) noexcept;
-	// old test collis
-	void testCollision(Ball& ball, Paddle& paddle) noexcept;
-	void testCollision(Ball& ball, Brick& brick) noexcept;
 
 	template <class T1, class T2>
 	bool isIntersecting(T1& rA, T2& rB) noexcept;
+
+private:
+	// Members
+	EntityManager m_entityManager;
+
 };
 
 // Template functions

@@ -5,13 +5,7 @@
 PositionComponent::PositionComponent(const Vector2f& rPosition) : m_position(rPosition)
 {
 }
-/*
-PositionComponent::PositionComponent(float rXPos, float rYPos)
-{
-	m_position.x = rXPos;
-	m_position.y = rYPos;
-}
-*/
+
 float PositionComponent::x() const noexcept
 {
 	return (m_position.x);

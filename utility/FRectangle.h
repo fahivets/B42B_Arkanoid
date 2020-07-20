@@ -1,6 +1,9 @@
 #ifndef FRECTANGLE_H
 #define FRECTANGLE_H
 
+/*
+	OLD TODO dell
+*/
 struct FRectangle
 {
 	SDL_FRect m_frect;
