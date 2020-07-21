@@ -72,7 +72,7 @@ void StartState::createButton(const Vector2f& rPosition, const Vector2f& rSize)
 	entity.addComponent<PositionComponent>(rPosition);
 	entity.addComponent<BoxComponent>(Vector2f{ rSize.x, rSize.y });
 
-	std::array<const char*, 3> buttonTexture{ "button_n", "button_h", "button_r" };
+	std::array<const char*, 3> buttonTexture{ "button_n.png", "button_h.png", "button_r.png" };
 	entity.addComponent<UIButtonComponent>(m_pGame->getRenderer(), buttonTexture);
 	// Set function
 	auto& button(entity.getComponent<UIButtonComponent>());

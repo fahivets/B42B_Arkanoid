@@ -1,9 +1,8 @@
 #include "stdafx.h"
 #include "TextureManager.h"
 
-TextureManager::TextureManager(const std::string& folder, const std::string& extention)
-	: m_folder("resource/" + folder + "/")
-	, m_extention("." + extention)
+TextureManager::TextureManager(const std::string& folder)
+	: m_folder(folder)
 {}
 
 TextureManager::~TextureManager()
@@ -19,22 +18,25 @@ SDL_Texture* TextureManager::get(const std::string& name) const
 {
 	if (!isExists(name))
 	{
-		return (m_textureMap.at("fiasko").get());
+		return (m_textureMap.at("fiasko.png").get());
 	}
 	return m_textureMap.at(name).get();
 }
 
 void TextureManager::set(SDL_Renderer& rRenderer, const std::string& name)
 {
+	if (isExists(name))
+		return ;
+	
 	auto tmpPtr = loadTexture(rRenderer, getFullFileName(name));
 
 	if (tmpPtr)
 	{
 		m_textureMap[name] = std::move(tmpPtr);
 	}
-	else if (!isExists("fiasko"))
+	else if (!isExists("fiasko.png"))
 	{
-		tmpPtr = loadTexture(rRenderer, getFullFileName("fiasko"));
+		tmpPtr = loadTexture(rRenderer, getFullFileName("fiasko.png"));
 		if (!tmpPtr)
 			assert("this is fiasko <T_T> sempai");
 		else
@@ -44,7 +46,7 @@ void TextureManager::set(SDL_Renderer& rRenderer, const std::string& name)
 // tmp functions for test
 void TextureManager::init(SDL_Renderer& rRenderer)
 {
-	set(rRenderer, "fiasko");
+	set(rRenderer, "fiasko.png");
 }
 
 // Private functions
@@ -61,5 +63,5 @@ SDLTextureUPtr TextureManager::loadTexture(SDL_Renderer& rRenderer, const std::s
 
 std::string TextureManager::getFullFileName(const std::string& name)
 {
-	return (m_folder + name + m_extention);
+	return (m_folder + name);
 }

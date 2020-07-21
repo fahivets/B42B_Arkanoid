@@ -4,12 +4,6 @@
 #include "PositionComponent.h"
 #include "BoxComponent.h"
 
-/*
-	TODO: 
-		- do i need here PosComp? srcRect/dstRect?
-
-*/
-
 struct TextureComponent : public Component
 {
 	TextureComponent(SDL_Renderer& rRenderer, const char* textureName);

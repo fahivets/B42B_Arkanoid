@@ -89,7 +89,11 @@ void PlayingState::createBall()
 	entity.addComponent<PositionComponent>(Vector2f{ DISPLAY::WINDOW::WIDTH / 2, DISPLAY::WINDOW::HEIGTH / 2 });
 	entity.addComponent<BoxComponent>(Vector2f{ BALL::RADIUS * 2, BALL::RADIUS * 2 });
 	entity.addComponent<PhysicsComponent>();
-	entity.addComponent<RectangleComponent>(SDL_Color{ 255, 0, 0, 255 });
+	
+	//entity.addComponent<RectangleComponent>(SDL_Color{ 255, 0, 0, 255 });
+
+	entity.addComponent<TextureComponent>(m_pGame->getRenderer(), "ball_red.png");
+
 	auto& physics(entity.getComponent<PhysicsComponent>());
 	physics.m_velocity = Vector2f{ -BALL::VELOCITY, -BALL::VELOCITY };
 
@@ -117,9 +121,9 @@ void PlayingState::createPaddle()
 	entity.addComponent<PhysicsComponent>();
 
 	// TODO tmp rectcomponent
-	entity.addComponent<RectangleComponent>(SDL_Color{ 0, 0, 255, 255 });
+	//entity.addComponent<RectangleComponent>(SDL_Color{ 0, 0, 255, 255 });
 	
-	entity.addComponent<TextureComponent>(m_pGame->getRenderer(), "test");
+	entity.addComponent<TextureComponent>(m_pGame->getRenderer(), "paddle_gold.png");
 	entity.addComponent<PaddleControlComponent>();
 	
 	entity.addGroup(ArkanoidGroup::GPaddle);
@@ -134,10 +138,10 @@ void PlayingState::createBrick(const Vector2f& rPosition)
 	entity.addComponent<PhysicsComponent>();
 
 	// TODO tmp rectcomponent
-	entity.addComponent<RectangleComponent>(SDL_Color{ 255, 255, 0, 255 });
-	// test fiasko texture
-	entity.addComponent<TextureComponent>(m_pGame->getRenderer(), "none");
-	
+	//entity.addComponent<RectangleComponent>(SDL_Color{ 255, 255, 0, 255 });
+
+	entity.addComponent<TextureComponent>(m_pGame->getRenderer(), "brick_blue.png");
+
 	entity.addGroup(ArkanoidGroup::GBrick);
 }
 

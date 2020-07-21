@@ -24,6 +24,9 @@ bool AudioManager::isMusicExists(const std::string& name) const
 
 void AudioManager::setSound(const std::string& name)
 {
+	if (isSoundExists(name))
+		return;
+
 	auto tmpPtr = loadSound(getFullFileName(name));
 
 	if (tmpPtr)
@@ -42,6 +45,9 @@ void AudioManager::setSound(const std::string& name)
 
 void AudioManager::setMusic(const std::string& name)
 {
+	if (isMusicExists(name))
+		return;
+
 	auto tmpPtr = loadMusic(getFullFileName(name));
 
 	if (tmpPtr)
@@ -52,7 +58,7 @@ void AudioManager::setMusic(const std::string& name)
 	{
 		tmpPtr = loadMusic(getFullFileName("404_music"));
 		if (!tmpPtr)
-			assert("404_msuci <T_T> sempai");
+			assert("404_music <T_T> sempai");
 		else
 			m_musicMap[name] = std::move(tmpPtr);
 	}

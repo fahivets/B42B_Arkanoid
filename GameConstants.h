@@ -21,7 +21,7 @@ namespace BALL
 
 namespace PADDLE
 {
-	constexpr float WIDTH{ 60.0f };
+	constexpr float WIDTH{ 80.0f };
 	constexpr float HEIGTH{ 20.0f };
 	constexpr float VELOCITY{ 0.6f };
 } /*	end namespace Paddle	*/

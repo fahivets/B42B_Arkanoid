@@ -8,7 +8,8 @@ ResourceHolder& ResourceHolder::get()
 }
 
 ResourceHolder::ResourceHolder()
-	: textures("textures", "png")
+	: textures("resource/textures/")
 	, fonts("fonts", "ttf")
 	, audio("audio", "wav")
-{}
+{
+}

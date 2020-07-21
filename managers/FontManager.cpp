@@ -17,6 +17,9 @@ bool FontManager::isExists(const std::string& name) const
 
 void FontManager::set(const std::string& name, const int& fontSize)
 {
+	if (isExists(name))
+		return;
+
 	auto tmpPtr = loadFont(getFullFileName(name), fontSize);
 
 	if (tmpPtr)
